@@ -1,4 +1,4 @@
-var Data_version = "maimai DX Universe (DX 1.20)"
+var Data_version = "maimai DX UNiVERSE (DX 1.20)"
 var song_data = [
     {
         "ID": 8,

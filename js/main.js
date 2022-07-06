@@ -10,8 +10,8 @@ var diff_folder = 2;
 var count = 0;
 function main()
 {
-    document.getElementById("text_data_version").innerHTML = "Data Version:" + Data_version;
-    document.getElementById("text_core_version").innerHTML = "Core Version:" + Core_Version;
+    document.getElementById("text_data_version").innerHTML = "Data Version: " + Data_version;
+    document.getElementById("text_core_version").innerHTML = "Core Version: " + Core_Version;
     for (var i = 0; i < song_data.length; i++)
     {
         show_all += Songbox_search(song_data[i], diff_level_min, diff_level_max, diff_map, diff_genre, diff_maptype, diff_version);
