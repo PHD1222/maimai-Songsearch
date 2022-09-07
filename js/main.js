@@ -1,4 +1,4 @@
-var Core_Version = "20220706-1642 (Build:301)"
+var Core_Version = "20220907-2334 (Build:330)"
 var show_all = "";
 var diff_level_min = 0;
 var diff_level_max = 23;
@@ -8,40 +8,104 @@ var diff_version = 18;
 var diff_maptype = 2;
 var diff_folder = 2;
 var count = 0;
+
+const diff_search_level = [
+    "0", "1", "2", "3", "4", "5", "6",
+    "7", "7+", "8", "8+", "9", "9+", "10", "10+",
+    "11", "11+", "12", "12+", "13", "13+", "14", "14+",
+    "15"
+];
+const diff_search = [
+    "Basic", "Advanced", "Expert", "Master", "Re:Master", "All"
+];
+const diff_search_genre = [
+    "POPS&アニメ",
+    "niconico&ボーカロイド",
+    "東方Project",
+    "ゲーム&バラエティ",
+    "maimai",
+    "オンゲキ&CHUNITHM",
+    "All"
+];
+const diff_search_version = [
+    "maimai",
+    "maimai PLUS",
+    "maimai Green",
+    "maimai Green PLUS",
+    "maimai Orange",
+    "maimai Orange PLUS",
+    "maimai Pink",
+    "maimai Pink PLUS",
+    "maimai Murasaki",
+    "maimai Murasaki PLUS",
+    "maimai Milk",
+    "maimai Milk PLUS",
+    "maimai Finale",
+    "maimai DX",
+    "maimai DX PLUS",
+    "maimai DX Splash",
+    "maimai DX Splash PLUS",
+    "maimai DX UNiVERSE",
+    "maimai DX UNiVERSE PLUS",
+    //"maimai DX FESTiVAL",
+    //"maimai DX FESTiVAL PLUS",
+    "All"
+];
+const diff_search_maptype = [
+    "ST", "DX", "All"
+];
+const diff_search_folder = [
+    "分类", "难度", "版本", "None"
+    //"名称",
+];
+
+function Set_Slider(obj, min, max, value)
+{
+    document.getElementById(obj).min = min;
+    document.getElementById(obj).max = max;
+    document.getElementById(obj).value = value;
+}
 function main()
 {
     document.getElementById("text_data_version").innerHTML = "Data Version: " + Data_version;
     document.getElementById("text_core_version").innerHTML = "Core Version: " + Core_Version;
-    for (var i = 0; i < song_data.length; i++)
-    {
-        show_all += Songbox_search(song_data[i], diff_level_min, diff_level_max, diff_map, diff_genre, diff_maptype, diff_version);
-    }
-    document.getElementById('text_search_display').innerHTML = "共有" + count + "首曲子符合要求";
-    document.getElementById("display_area").innerHTML = show_all;
+
+    //#region Init
+    Set_Slider("slide_diff_min", 0, diff_search_level.length - 1, 0);
+    Set_Slider("slide_diff_max", 0, diff_search_level.length - 1, diff_search_level.length - 1);
+    Set_Slider("slide_mapdiff", 0, diff_search.length - 1, diff_search.length - 1);
+    Set_Slider("slide_genre", 0, diff_search_genre.length - 1, diff_search_genre.length - 1);
+    Set_Slider("slide_version", 0, diff_search_version.length - 1, diff_search_version.length - 1);
+    Set_Slider("slide_maptype", 0, diff_search_maptype.length - 1, diff_search_maptype.length - 1);
+    Set_Slider("slide_folder", 0, diff_search_folder.length - 1, diff_search_folder.length - 1);
+    //#endregion
+
+    
+    diff_slider();
 }
 function diff_slider()
 {
     count = 0;
     show_all = "";
-    diff_level_min = parseInt(document.getElementById('slide_diff_min').value);
-    diff_level_max = parseInt(document.getElementById('slide_diff_max').value);
-    diff_map = parseInt(document.getElementById('slide_mapdiff').value);
-    diff_genre = parseInt(document.getElementById('slide_genre').value);
-    diff_version = parseInt(document.getElementById('slide_version').value);
-    diff_maptype = parseInt(document.getElementById('slide_maptype').value);
-    diff_folder = parseInt(document.getElementById('slide_folder').value);
+    diff_level_min = parseInt(document.getElementById("slide_diff_min").value);
+    diff_level_max = parseInt(document.getElementById("slide_diff_max").value);
+    diff_map = parseInt(document.getElementById("slide_mapdiff").value);
+    diff_genre = parseInt(document.getElementById("slide_genre").value);
+    diff_version = parseInt(document.getElementById("slide_version").value);
+    diff_maptype = parseInt(document.getElementById("slide_maptype").value);
+    diff_folder = parseInt(document.getElementById("slide_folder").value);
     if (diff_level_max < diff_level_min)
     {
-        document.getElementById('slide_diff_max').value = diff_level_min;
-        diff_level_min = parseInt(document.getElementById('slide_diff_min').value);
-        diff_level_max = parseInt(document.getElementById('slide_diff_max').value);
+        document.getElementById("slide_diff_max").value = diff_level_min;
+        diff_level_min = parseInt(document.getElementById("slide_diff_min").value);
+        diff_level_max = parseInt(document.getElementById("slide_diff_max").value);
     }
     switch (diff_folder)
     {
         case 0://Genre
-            if (diff_genre == 6)
+            if (diff_genre == diff_search_genre.length - 1)
             {
-                for (var i = 0; i < 6; i++)
+                for (var i = 0; i < diff_search_genre.length - 1; i++)
                 {
                     count = 0;
                     show_all += "<details>";
@@ -75,9 +139,9 @@ function diff_slider()
             }
             break;
         case 2://Version
-            if (diff_version == 18)
+            if (diff_version == diff_search_version.length - 1)
             {
-                for (var i = 0; i < 18; i++)
+                for (var i = 0; i < diff_search_version.length - 1; i++)
                 {
                     count = 0;
                     show_all += "<details>";
@@ -104,21 +168,20 @@ function diff_slider()
             }
             break;
     }
-    document.getElementById('text_slide_min').innerHTML = "最低等级显示:" + diff_search_level[diff_level_min];
-    document.getElementById('text_slide_max').innerHTML = "最高等级显示:" + diff_search_level[diff_level_max];
-    document.getElementById('text_slide_mapdiff').innerHTML = "难度显示:" + diff_search[diff_map];
-    document.getElementById('text_slide_genre').innerHTML = "分类显示:" + diff_search_genre[diff_genre];
-    document.getElementById('text_slide_version').innerHTML = "版本显示:" + diff_search_version[diff_version];
-    document.getElementById('text_slide_maptype').innerHTML = "谱面类型显示:" + diff_search_maptype[diff_maptype];
-    document.getElementById('text_slide_folder').innerHTML = "分类夹显示:" + diff_search_folder[diff_folder];
-    document.getElementById('text_search_display').innerHTML = diff_folder == 3 ? "共有" + count + "首曲子符合要求" : "";
+    document.getElementById("text_slide_min").innerHTML = "最低等级显示:" + diff_search_level[diff_level_min];
+    document.getElementById("text_slide_max").innerHTML = "最高等级显示:" + diff_search_level[diff_level_max];
+    document.getElementById("text_slide_mapdiff").innerHTML = "难度显示:" + diff_search[diff_map];
+    document.getElementById("text_slide_genre").innerHTML = "分类显示:" + diff_search_genre[diff_genre];
+    document.getElementById("text_slide_version").innerHTML = "版本显示:" + diff_search_version[diff_version];
+    document.getElementById("text_slide_maptype").innerHTML = "谱面类型显示:" + diff_search_maptype[diff_maptype];
+    document.getElementById("text_slide_folder").innerHTML = "分类夹显示:" + diff_search_folder[diff_folder];
+    document.getElementById("text_search_display").innerHTML = diff_folder == 3 ? "共有" + count + "首曲子符合要求" : "";
     document.getElementById("summary_search").innerHTML = "筛选 (" +
         diff_search_maptype[diff_maptype] + " " +
         diff_search[diff_map] + " " +
         "Lv " + diff_search_level[diff_level_min] + " / " + diff_search_level[diff_level_max] + ")";
     document.getElementById("display_area").innerHTML = show_all;
 }
-
 function Songbox_search(obj, level_min, level_max, diff, genre, map_type, map_version)
 {
     var search = [false, false, false, false, false];
@@ -128,9 +191,11 @@ function Songbox_search(obj, level_min, level_max, diff, genre, map_type, map_ve
     show += "<p class='text_genre_name'>" + obj.Genre + "</p>";
     show += "<p class='text_song_id'>" + obj.ID + "</p>";
     show += "</div>";
-    show += "<img class='song_img' src=''/>";
+    show += "<div class='div_song_title'>";
     show += "<p class='text_song_title'>" + obj.Name + "</p>";
     show += "<p class='text_song_subtitle'>" + obj.ArtistName + "</p>";
+    //show += "<img class='song_img' src='" + Img_Cover(obj.ID) + "'/>";
+    show += "</div>";
     show += "<div class='div_diff_all'>";
     if (obj.Type == "ST")
     {
@@ -186,11 +251,11 @@ function Songbox_search(obj, level_min, level_max, diff, genre, map_type, map_ve
     }
     show += "</div>";
     show += "</div>";
-    if (obj.Version_Number == map_version || map_version == 18)
+    if (obj.Version_Number == map_version || map_version == diff_search_version.length - 1)
     {
-        if (Maptype_strToint(obj.Type) == map_type || map_type == 2)//谱面种类
+        if (Maptype_strToint(obj.Type) == map_type || map_type == diff_search_maptype.length - 1)//谱面种类
         {
-            if (Genre_strToint(obj.Genre) == genre || genre == 6)//分类
+            if (Genre_strToint(obj.Genre) == genre || genre == diff_search_genre.length - 1)//分类
             {
                 if (diff != 5)
                 {
@@ -255,50 +320,24 @@ function Maptype_strToint(maptype)
             return 1;
     }
 }
-
-var diff_search_level = [
-    '0', '1', '2', '3', '4', '5', '6',
-    '7', '7+', '8', '8+', '9', '9+', '10', '10+',
-    '11', '11+', '12', '12+', '13', '13+', '14', '14+',
-    '15', '15+'
-];
-var diff_search = [
-    "Basic", "Advanced", "Expert", "Master", "Re:Master", "All"
-];
-var diff_search_genre = [
-    "POPS&アニメ",
-    "niconico&ボーカロイド",
-    "東方Project",
-    "ゲーム&バラエティ",
-    "maimai",
-    "オンゲキ&CHUNITHM",
-    "All"
-];
-var diff_search_version = [
-    "maimai",
-    "maimai PLUS",
-    "maimai Green",
-    "maimai Green PLUS",
-    "maimai Orange",
-    "maimai Orange PLUS",
-    "maimai Pink",
-    "maimai Pink PLUS",
-    "maimai Murasaki",
-    "maimai Murasaki PLUS",
-    "maimai Milk",
-    "maimai Milk PLUS",
-    "maimai Finale",
-    "maimai DX",
-    "maimai DX PLUS",
-    "maimai DX Splash",
-    "maimai DX Splash PLUS",
-    "maimai DX Universe",
-    "All",
-    "maimai DX Universe PLUS"
-];
-var diff_search_maptype = [
-    "ST", "DX", "All"
-];
-var diff_search_folder = [
-    "分类", "难度", "版本", "None", "名称"
-];
+function Img_Cover(id)
+{
+    var cover_id_str_array = (id >= 10000 ? id - 10000 : id).toString().split("");
+    var cover_id_str = "";
+    if (cover_id_str_array.length == 4)
+    {
+        cover_id_str = cover_id_str_array[0] + cover_id_str_array[1] + cover_id_str_array[2] + cover_id_str_array[3];
+    }
+    else
+    {
+        for (var i = 0; i < 4 - cover_id_str_array.length; i++)
+        {
+            cover_id_str += "0";
+        }
+        for (var i = 0; i < cover_id_str_array.length; i++)
+        {
+            cover_id_str += cover_id_str_array[i];
+        }
+    }
+    return "https://www.diving-fish.com/covers/" + cover_id_str + ".png";
+}
