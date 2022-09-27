@@ -1,0 +1,52 @@
+<html>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="./css/main.css">
+<link rel="stylesheet" href="./css/icon_version.css">
+<title>maimai定数表</title>
+
+<body onload="main();">
+	<p>Frame Version: 20220907-2334 (Build:330)</p>
+	<p id="text_core_version"></p>
+	<p id="text_data_version"></p>
+	<details class="detail_search">
+		<summary id="summary_search">筛选</summary>
+		<div id="slides_area">
+			<div class="div_slide">
+				<input id="slide_diff_min" type="range" onchange="diff_slider()">
+				<p id="text_slide_min">最低等级显示:0</p>
+			</div>
+			<div class="div_slide">
+				<input id="slide_diff_max" type="range" onchange="diff_slider()">
+				<p id="text_slide_max">最高等级显示:15</p>
+			</div>
+			<div class="div_slide">
+				<input id="slide_mapdiff" type="range" onchange="diff_slider()">
+				<p id="text_slide_mapdiff">难度显示:All</p>
+			</div>
+			<div class="div_slide">
+				<input id="slide_genre" type="range" onchange="diff_slider()">
+				<p id="text_slide_genre">分类显示:All</p>
+			</div>
+			<div class="div_slide">
+				<input id="slide_version" type="range" onchange="diff_slider()">
+				<p id="text_slide_version">版本显示:All</p>
+			</div>
+			<div class="div_slide">
+				<input id="slide_maptype" type="range" onchange="diff_slider()">
+				<p id="text_slide_maptype">谱面类型显示:All</p>
+			</div>
+			<div class="div_slide">
+				<input id="slide_folder" type="range" onchange="diff_slider()">
+				<p id="text_slide_folder">分类夹显示:None</p>
+			</div>
+		</div>
+		<p id="text_search_display"></p>
+	</details>
+	<div id="display_area">
+	</div>
+	<p id="to_top" onclick="Gototop()">返回顶部</p>
+</body>
+<script src="./js/data/main_data.js"></script>
+<script src="./js/pagetool.js"></script>
+<script src="./js/main.js"></script>
+</html>
