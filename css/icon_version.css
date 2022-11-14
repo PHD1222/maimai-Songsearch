@@ -15,14 +15,15 @@
 .icon_ver_14,
 .icon_ver_15,
 .icon_ver_16,
-.icon_ver_17
+.icon_ver_17,
+.icon_ver_18
 {
     border-radius: 20px 20px 20px 20px;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
     line-height: 34px;
-    width: 260px;
+    width: 280px;
     height: 34px;
     position: relative;
     top: -40px;
@@ -100,7 +101,8 @@
     color: yellow;
 }
 /*DX UNiVERSE*/
-.icon_ver_17
+.icon_ver_17,
+.icon_ver_18
 {
     color: rgb(0, 183, 255);
     background-color: rgb(255, 140, 165);
