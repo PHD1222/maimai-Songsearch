@@ -1,4 +1,4 @@
-var Core_Version = "20230223-1151 (Build:400-BETA-0)"
+var Core_Version = "20230306-0222 (Build:406)"
 var show_all = "";
 var diff_level_min = 0;
 var diff_level_max = 23;
