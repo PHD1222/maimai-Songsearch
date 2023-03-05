@@ -16,7 +16,8 @@
 .icon_ver_15,
 .icon_ver_16,
 .icon_ver_17,
-.icon_ver_18
+.icon_ver_18,
+.icon_ver_19
 {
     border-radius: 20px 20px 20px 20px;
     font-size: 20px;
@@ -107,4 +108,11 @@
     color: rgb(0, 183, 255);
     background-color: rgb(255, 140, 165);
     border: 3px solid rgb(255, 55, 120);
+}
+/*DX FESTiVAL*/
+.icon_ver_19
+{
+    color: rgb(212, 154, 254);
+    background-color: rgb(255, 255, 155);
+    border: 3px solid rgb(255, 128, 0);
 }

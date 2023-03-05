@@ -1,4 +1,4 @@
-var Core_Version = "20220927-2143 (Build:336)"
+var Core_Version = "20230223-1151 (Build:400-BETA-0)"
 var show_all = "";
 var diff_level_min = 0;
 var diff_level_max = 23;
@@ -16,7 +16,12 @@ const diff_search_level = [
     "15"
 ];
 const diff_search = [
-    "Basic", "Advanced", "Expert", "Master", "Re:Master", "All"
+    "Basic",
+    "Advanced",
+    "Expert",
+    "Master",
+    "Re:Master",
+    "All"
 ];
 const diff_search_genre = [
     "POPS&アニメ",
@@ -47,7 +52,7 @@ const diff_search_version = [
     "maimai DX Splash PLUS",
     "maimai DX UNiVERSE",
     "maimai DX UNiVERSE PLUS",
-    //"maimai DX FESTiVAL",
+    "maimai DX FESTiVAL",
     "All"
 ];
 const diff_search_maptype = [
@@ -79,7 +84,6 @@ function main()
     Set_Slider("slide_folder", 0, diff_search_folder.length - 1, diff_search_folder.length - 1);
     //#endregion
 
-    
     diff_slider();
 }
 function diff_slider()
@@ -183,6 +187,7 @@ function diff_slider()
 }
 function Songbox_search(obj, level_min, level_max, diff, genre, map_type, map_version)
 {
+    console.log(obj)
     var search = [false, false, false, false, false];
     var show = "";
     show += "<div class='div_song_genre" + Genre_strToint(obj.Genre) + "'>";
@@ -212,74 +217,100 @@ function Songbox_search(obj, level_min, level_max, diff, genre, map_type, map_ve
     }
     show += "<p class='icon_ver_" + obj.Version_Number + "'>"
     + diff_search_version[obj.Version_Number] + "</p>";
-    for (var n = 0; n < 5; n++)
+    for (var n = 0; n < obj.Charts.length; n++)
     {
-        if (n == 4 && obj.Diff_Detail[4] == 0)
+        show += "<div class='div_diff_" + n.toString() + "'>";
+        show += "<p class='diff_" + n.toString() + "_L'>" + obj.Charts[n].Diff_str + "</p>";
+        show += "<p class='diff_" + n.toString() + "_R'>" + obj.Charts[n].Diff_Detail.toFixed(1) + "</p>";
+        if (diff != 5)
         {
-            break;
-        }
-        else
-        {
-            show += "<div class='div_diff_" + n.toString() + "'>";
-            show += "<p class='diff_" + n.toString() + "_L'>" + obj.Diff_str[n] + "</p>";
-            show += "<p class='diff_" + n.toString() + "_R'>" + obj.Diff_Detail[n].toFixed(1) + "</p>";
-            if (diff != 5)
+            if (obj.Charts[n].Diff_Search_Num >= level_min && obj.Charts[n].Diff_Search_Num <= level_max && n == diff)
             {
-                if (obj.Diff_Search_Num[n] >= level_min && obj.Diff_Search_Num[n] <= level_max && n == diff)
-                {
-                    search[n] = true;
-                }
-                else
-                {
-                    show += "<p class='diff_search0'></p>";
-                }    
-            }
-            else if (diff == 5)
-            {
-                if (obj.Diff_Search_Num[n] >= level_min && obj.Diff_Search_Num[n] <= level_max)
-                {
-                    search[n] = true;
-                }
-                else
-                {
-                    show += "<p class='diff_search0'></p>";
-                }
-            }
-            show += "</div>";
-        }
-    }
-    show += "</div>";
-    show += "</div>";
-    if (obj.Version_Number == map_version || map_version == diff_search_version.length - 1)
-    {
-        if (Maptype_strToint(obj.Type) == map_type || map_type == diff_search_maptype.length - 1)//谱面种类
-        {
-            if (Genre_strToint(obj.Genre) == genre || genre == diff_search_genre.length - 1)//分类
-            {
-                if (diff != 5)
-                {
-                    count = search[diff] ? count += 1 : count;
-                    return search[diff] ? show : "";
-                }
-                else
-                {
-                    count = search[0] || search[1] || search[2] || search[3] || search[4] ? count += 1 : count;
-                    return search[0] || search[1] || search[2] || search[3] || search[4] ? show : "";
-                }
+                search[n] = true;
             }
             else
             {
-                return "";
+                show += "<p class='diff_dark'></p>";
+            }    
+        }
+        else if (diff == 5)
+        {
+            if (obj.Charts[n].Diff_Search_Num >= level_min && obj.Charts[n].Diff_Search_Num <= level_max)
+            {
+                search[n] = true;
+            }
+            else
+            {
+                show += "<p class='diff_dark'></p>";
             }
         }
-        else
-        {
-            return "";
-        }
+        show += "</div>";
+    }
+    show += "</div>";
+    show += "<details>";
+    show += "<summary class='text_chart_detail'>Chart Detail</summary>";
+    show += "<div class='div_chart'>";
+    for (var i = 0; i < obj.Charts.length; i++)
+    {
+        show += `<div class='div_designer'>`;
+        show += `<p class='designer_${i.toString()}'>Note Designer</p>`;
+        show += `<p class='designer_white'>${obj.Charts[i].NotesDesigner}</p>`;
+        
+        show += `<div class='div_notes_detail'>`;
+
+        show += `<div class='div_notes_maxCombo'>`;
+        show += `<p class='notes_text_top'>Total</p>`;
+        show += `<p class='notes_text_bottom'>${obj.Charts[i].NotesMaxCombo}</p>`;
+        show += `</div>`;
+        
+        show += `<div class='div_notes_tap'>`;
+        show += `<p class='notes_text_top'>Tap</p>`;
+        show += `<p class='notes_text_bottom'>${obj.Charts[i].NotesTap}</p>`;
+        show += `</div>`;
+        
+        show += `<div class='div_notes_hold'>`;
+        show += `<p class='notes_text_top'>Hold</p>`;
+        show += `<p class='notes_text_bottom'>${obj.Charts[i].NotesHold}</p>`;
+        show += `</div>`;
+
+        show += `<div class='div_notes_silde'>`;
+        show += `<p class='notes_text_top'>Slide</p>`;
+        show += `<p class='notes_text_bottom'>${obj.Charts[i].NotesSlide}</p>`;
+        show += `</div>`;
+
+        show += `<div class='div_notes_touch'>`;
+        show += `<p class='notes_text_top'>Touch</p>`;
+        show += `<p class='notes_text_bottom'>${obj.Charts[i].NotesTouch}</p>`;
+        show += `</div>`;
+
+        show += `<div class='div_notes_break'>`;
+        show += `<p class='notes_text_top'>Break</p>`;
+        show += `<p class='notes_text_bottom'>${obj.Charts[i].NotesBreak}</p>`;
+        show += `</div>`;
+
+        show += `</div>`;
+        
+        show += `</div>`;
+    }
+    show += "</div>";
+    show += "</details>"
+    show += "</div>";
+
+    if (obj.Version_Number != map_version && map_version != diff_search_version.length - 1 ||
+        Maptype_strToint(obj.Type) != map_type && map_type != diff_search_maptype.length - 1 ||
+        Genre_strToint(obj.Genre) != genre && genre != diff_search_genre.length - 1)
+    {
+        return "";
+    }
+    if (diff != 5)
+    {
+        count = search[diff] ? count += 1 : count;
+        return search[diff] ? show : "";
     }
     else
     {
-        return "";
+        count = search[0] || search[1] || search[2] || search[3] || search[4] ? count += 1 : count;
+        return search[0] || search[1] || search[2] || search[3] || search[4] ? show : "";
     }
 }
 function Genre_strToint(genre)
@@ -292,6 +323,7 @@ function Genre_strToint(genre)
         case "niconicoボーカロイド":
         case "niconico&ボーカロイド":
             return 1;
+        case "东方Project":
         case "東方Project":
             return 2;
         case "バラエティ":
@@ -318,25 +350,4 @@ function Maptype_strToint(maptype)
         case "DX":
             return 1;
     }
-}
-function Img_Cover(id)
-{
-    var cover_id_str_array = (id >= 10000 ? id - 10000 : id).toString().split("");
-    var cover_id_str = "";
-    if (cover_id_str_array.length == 4)
-    {
-        cover_id_str = cover_id_str_array[0] + cover_id_str_array[1] + cover_id_str_array[2] + cover_id_str_array[3];
-    }
-    else
-    {
-        for (var i = 0; i < 4 - cover_id_str_array.length; i++)
-        {
-            cover_id_str += "0";
-        }
-        for (var i = 0; i < cover_id_str_array.length; i++)
-        {
-            cover_id_str += cover_id_str_array[i];
-        }
-    }
-    return "https://www.diving-fish.com/covers/" + cover_id_str + ".png";
 }
